@@ -1,0 +1,38 @@
+# Dependencies and generated output
+node_modules/
+.venv/
+build/
+dist/
+release/
+
+# Local caches and diagnostics
+.DS_Store
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+{{pkgetc}}/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Local media and installers
+*.webm
+*.mp4
+*.mov
+*.m4v
+*.mkv
+*.avi
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+*.dmg
+*.app/
+
+# Model downloads; retain the bundled release model
+*.pt
+!/yolov8n-pose.pt

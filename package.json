@@ -1,0 +1,73 @@
+{
+  "name": "dance-videocut",
+  "private": true,
+  "version": "1.0.8",
+  "description": "Local dance video tracking and reframing studio",
+  "author": "Dance Videocut",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "electron": "wait-on http://127.0.0.1:5180 && electron .",
+    "dev:desktop": "concurrently -k \"npm run dev\" \"npm run electron\"",
+    "build": "tsc && vite build",
+    "bundle:engine": "node scripts/bundle-engine.mjs",
+    "package:mac": "npm run bundle:engine && npm run build && electron-builder --mac --arm64",
+    "release:mac": "node scripts/release-mac.mjs patch",
+    "release:mac:minor": "node scripts/release-mac.mjs minor",
+    "release:mac:major": "node scripts/release-mac.mjs major",
+    "build:desktop": "npm run package:mac",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "com.danceframe.studio",
+    "productName": "Dance Videocut",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "engine/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.video",
+      "icon": "resources/danceframe-icon.icns",
+      "target": [
+        "dmg"
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "extraResources": [
+      {
+        "from": "build/engine/DanceFrameEngine",
+        "to": "engine/DanceFrameEngine"
+      },
+      {
+        "from": "node_modules/ffmpeg-static/ffmpeg",
+        "to": "bin/ffmpeg"
+      }
+    ],
+    "afterPack": "scripts/after-pack.cjs"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "@vitejs/plugin-react": "^4.3.4",
+    "ffmpeg-static": "^5.3.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "concurrently": "^9.1.2",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "wait-on": "^8.0.1"
+  }
+}

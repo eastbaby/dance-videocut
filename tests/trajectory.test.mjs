@@ -1,0 +1,15 @@
+import { transformSync } from 'esbuild';
+import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
+const code = transformSync(readFileSync(new URL('../src/trajectory.ts', import.meta.url), 'utf8'), {loader:'ts',format:'esm'}).code;
+const {smoothTrajectory} = await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
+const boxes=Array.from({length:100},(_,i)=>({x:i%2?200:100,y:90,w:100,h:180}));
+const snapshot=JSON.stringify(boxes);
+assert.deepEqual(smoothTrajectory(boxes,0),boxes);
+const smooth=smoothTrajectory(boxes,92);
+assert(Math.abs(smooth[50].x-smooth[51].x)<1);
+assert.equal(JSON.stringify(boxes),snapshot);
+assert.deepEqual(smoothTrajectory([],78),[]);
+assert.deepEqual(smoothTrajectory([boxes[0]],92),[boxes[0]]);
+assert.deepEqual(smoothTrajectory(boxes,92),smooth);
+console.log('PASS: smoothing removes jitter, zero preserves raw data, repeated changes do not accumulate, boundaries remain valid');
