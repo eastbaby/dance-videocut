@@ -1,7 +1,7 @@
 {
   "name": "dance-videocut",
   "private": true,
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Local dance video tracking and reframing studio",
   "author": "Dance Videocut",
   "type": "module",

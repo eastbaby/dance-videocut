@@ -95,3 +95,16 @@ and internal engine/IPC names for compatibility with earlier installations.
 Generated installers, build directories, virtual environments and local media
 are excluded from Git. The bundled `yolov8n-pose.pt` model is retained so the
 release build has its required model without an extra download.
+
+## Logs
+
+Development runs write diagnostics to `.logs/` in the project root. Packaged
+Electron runs write to `.logs/` inside `app.getPath("userData")`, outside the
+application bundle. Electron passes this location to the engine using
+`DANCE_VIDEOCUT_LOG_DIR`; standalone frozen engines fall back to
+`~/.dance-videocut/.logs/`.
+
+`ffmpeg_command.log` contains the most recent export command and is overwritten
+on each export. Log write failures do not interrupt video export. Tracking and
+beat-analysis messages currently go to the UI via IPC rather than separate log
+files. `.logs/` is excluded from Git.

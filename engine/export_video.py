@@ -704,12 +704,16 @@ def main():
                 output_path,
             ])
 
-        # Log the command for debugging
+        # Electron supplies a writable directory outside the installed app.
+        # Direct source runs keep diagnostics under the project root.
         try:
-            with open(Path(__file__).resolve().parent.parent / "ffmpeg_command.log", "w") as f:
-                f.write(" ".join(command) + "\n")
-        except Exception:
-            pass
+            default_root = (Path.home() / ".dance-videocut" if getattr(sys, "frozen", False)
+                            else Path(__file__).resolve().parent.parent)
+            log_dir = Path(os.environ.get("DANCE_VIDEOCUT_LOG_DIR") or default_root / ".logs")
+            log_dir.mkdir(parents=True, exist_ok=True)
+            (log_dir / "ffmpeg_command.log").write_text(" ".join(command) + "\n", encoding="utf-8")
+        except OSError:
+            pass  # Diagnostic failures must not prevent export.
 
         process = subprocess.Popen(
             command,

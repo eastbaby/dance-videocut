@@ -25,6 +25,7 @@ function engineArgs() { return engineRuntime().args; }
 function engineEnvironment() {
   return {
     ...process.env,
+    DANCE_VIDEOCUT_LOG_DIR: path.join(isDev ? appRoot : app.getPath("userData"), ".logs"),
     FFMPEG_PATH: isDev
       ? process.env.FFMPEG_PATH
       : path.join(process.resourcesPath, "bin", "ffmpeg")

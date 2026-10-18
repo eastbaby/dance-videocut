@@ -6,6 +6,7 @@ dist/
 release/
 
 # Local caches and diagnostics
+.logs/
 .DS_Store
 __pycache__/
 *.py[cod]
